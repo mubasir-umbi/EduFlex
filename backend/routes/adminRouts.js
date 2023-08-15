@@ -9,6 +9,7 @@ import {
   loadTutorsData,
   tutorBlock,
   rejectRequest,
+  DashboardData
 } from "../controllers/adminController.js";
 
 import {
@@ -34,5 +35,6 @@ adminRoutes.post("/category/add", addCategory);
 adminRoutes.get("/category", loadCategoryData);
 adminRoutes.post("/category/update", updateCategory);
 adminRoutes.post("/category/delete", deleteCategory);
+adminRoutes.get("/dashboard", DashboardData);
 
 export default adminRoutes;

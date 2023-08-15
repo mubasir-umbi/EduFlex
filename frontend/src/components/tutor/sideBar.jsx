@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { theme } from "../../components/tutor/Theme";
 import {drawer} from './drawer'
 import { tutorLogout } from "../../slices/tutorSlices/tutorAuthSlice";
+import ChatPopUp from "../user/chatPopup";
 
 
 
@@ -94,14 +95,13 @@ const SideBar = (props) => {
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
           aria-label="mailbox folders"
         >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Drawer
             container={container}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true, 
             }}
             sx={{
               display: { xs: "block", sm: "none" },
@@ -127,7 +127,7 @@ const SideBar = (props) => {
             {drawer}
           </Drawer>
         </Box>
-        {props.children}
+        {props.children}       
       </Box>
     </ThemeProvider>
   );

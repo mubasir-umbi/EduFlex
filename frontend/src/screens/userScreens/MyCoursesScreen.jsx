@@ -22,17 +22,20 @@ import AddReview from "../../components/user/AddReview";
 import { toast } from "react-toastify";
 
 const MyCoursesScreen = () => {
-
   const [myCourse, setMyCourse] = useState([]);
   const [review, setReviews] = useState([]);
   const [updated, setUpdated] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
   const userId = userInfo._id;
+  const authToken = userInfo?.token;
 
   const submitHandler = (rating, review, courseId) => {
     try {
-      const res = userApi.post("review", { rating, review, userId, courseId });
+      const res = userApi.post(
+        "review",
+        { rating, review, userId, courseId },
+      );
       if (res) {
         setUpdated(true);
         toast.success("Review submited successfully");
@@ -46,7 +49,6 @@ const MyCoursesScreen = () => {
     const fetchReview = async () => {
       try {
         const res = await userApi.get("review");
-
         if (res) {
           console.log(res);
           const review = [];
@@ -158,6 +160,9 @@ const MyCoursesScreen = () => {
                       ""
                     ) : (
                       <AddReview
+                        ratingVal={''}
+                        reviewVal={''}
+                        edit={false}
                         courseId={course._id}
                         submitHandler={submitHandler}
                       />
@@ -168,9 +173,7 @@ const MyCoursesScreen = () => {
             ))
           )}
         </Grid>
-        
       </Container>
-
     </div>
   );
 };

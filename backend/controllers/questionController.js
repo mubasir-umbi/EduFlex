@@ -25,13 +25,12 @@ const addQuestion = asyncHandler((req, res) => {
 const loadQuestions = asyncHandler(async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
     const questions = await Question.find({ course: id })
       .populate("user")
       .populate({
         path: "replies",
         populate: { path: "user", select: "fName" },
-      });
+      }).populate('course')
 
     if (questions) {
       res.json(questions);
@@ -43,7 +42,41 @@ const loadQuestions = asyncHandler(async (req, res) => {
   }
 });
 
+// To update question ///
 
+const updateQuestion = asyncHandler(async (req, res) => {
+  try {
+    const id = req.query.id;
+    console.log(id);
+    const question = await Question.findById(id);
+
+    if (!question) throw new Error("Question not found");
+
+    question.text = req.body.text || question.text;
+
+    await question.save();
+    res.json("Qustion updated");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/// To delete question ///
+
+const deleteQuestion = asyncHandler(async (req, res) => {
+  try {
+    const id = req.query.id;
+    console.log(id);
+    const question = await Question.findByIdAndDelete(id);
+
+    if (!question) throw new Error("Question not found");
+      
+    res.json("Question deleted");
+  
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // const loadQuestions = asyncHandler(async (req, res) => {
 //     try {
@@ -97,7 +130,7 @@ const loadQuestions = asyncHandler(async (req, res) => {
 //           },
 //         },
 //       ]);
-  
+
 //       if (questions) {
 //         res.json(questions);
 //       } else {
@@ -107,6 +140,5 @@ const loadQuestions = asyncHandler(async (req, res) => {
 //       console.log(error);
 //     }
 //   });
-  
 
-export { addQuestion, loadQuestions };
+export { addQuestion, loadQuestions, deleteQuestion, updateQuestion };

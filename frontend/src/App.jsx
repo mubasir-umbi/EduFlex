@@ -22,8 +22,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminRoutes from './routes/adminRoutes';
 import UserRoutes from './routes/UserRout';
-import TutorRoutes from './routes/tutorRoutes';
-
+import TutorRoutes from './routes/TutorRoutes';
 const App = () => {
   return (
     <Router>

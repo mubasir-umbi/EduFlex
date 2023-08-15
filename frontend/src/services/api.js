@@ -1,7 +1,7 @@
 import axios from "axios";
 import { TUTOR_URL } from "../constants/tutorConstants";
 import { ADMIN_URL } from "../constants/adminConstans";
-import { USERS_URL } from "../constants/usersConstants";
+import { CHAT_URL, USERS_URL } from "../constants/usersConstants";
 
 
 axios.defaults.withCredentials = true
@@ -16,4 +16,8 @@ export const adminApi = axios.create({
 
 export const userApi = axios.create({
     baseURL: USERS_URL,
+})
+
+export const chatApi = axios.create({
+    baseURL: CHAT_URL,
 })

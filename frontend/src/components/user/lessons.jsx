@@ -6,7 +6,6 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
-
   Grid,
   Typography,
 } from "@mui/material";

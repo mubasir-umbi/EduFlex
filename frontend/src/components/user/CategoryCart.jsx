@@ -47,7 +47,7 @@ export default function CategoryCard() {
 
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
         <CssBaseline />
         
         <Container
@@ -94,6 +94,6 @@ export default function CategoryCard() {
           </Grid>
         </Container>
       </main>
-    </ThemeProvider>
+    </>
   );
 }

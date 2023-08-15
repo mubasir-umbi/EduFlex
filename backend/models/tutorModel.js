@@ -74,6 +74,11 @@ const registrationSchema = new mongoose.Schema({
     default: false
   },
 
+  about: {
+    type: String,
+    required: true
+  },
+
 
 
   students: [{

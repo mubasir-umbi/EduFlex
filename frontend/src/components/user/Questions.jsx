@@ -2,32 +2,40 @@ import { React, useEffect, useState } from "react";
 import { userApi } from "../../services/api";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Avatar, Box, Button, Divider, Rating, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Rating,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const Questions = ({ lesson, courseId }) => {
-
   const [question, setQuestion] = useState("");
-  const [QuestionsData, setQuestionsData] = useState([])
+  const [QuestionsData, setQuestionsData] = useState([]);
 
   const { userInfo } = useSelector((state) => state.auth);
   const userId = userInfo._id;
+  const authToken = userInfo.token
+
 
   useEffect(() => {
-    const getQuestiotns = async() => {
+    const getQuestiotns = async () => {
       try {
-        console.log('heloooooooo questions');
-        const res = await userApi.get(`questions?id=${courseId}`)
-      if(res){
-        setQuestionsData(res.data)
-        console.log(res)
-      }
+        const res = await userApi.get(`questions?id=${courseId}`, );
+        if (res) {
+          setQuestionsData(res.data);
+          console.log(res);
+        }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
 
-    getQuestiotns()
-  }, [])
+    getQuestiotns();
+  }, []);
 
   const submitHandler = async () => {
     console.log(lesson);
@@ -35,8 +43,14 @@ const Questions = ({ lesson, courseId }) => {
     const lessonId = lesson._id;
     try {
       const res = await userApi.post("question", {
-        userId,courseId,
-        lessonId,text,
+        userId,
+        courseId,
+        lessonId,
+        text,
+      },  {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
       });
       if (res) {
         toast.success(res.data, {
@@ -50,6 +64,7 @@ const Questions = ({ lesson, courseId }) => {
 
   return (
     <>
+      
       {lesson && (
         <Box
           height={80}
@@ -63,7 +78,7 @@ const Questions = ({ lesson, courseId }) => {
         </Box>
       )}
 
-      <Box p={4} ml={1} width={"67%"} height={'auto'} color={"#244D61"}>
+      <Box p={4} ml={1} width={"67%"} height={"auto"} color={"#244D61"}>
         {lesson && (
           <Box>
             <Typography
@@ -91,42 +106,39 @@ const Questions = ({ lesson, courseId }) => {
             >
               Submit
             </Button>
-         
+          </Box>
+        )}
         <Typography mt={3} variant="h6" component={"h3"}>
           Recently asked questions
         </Typography>
 
-        <Box p={2} >
-              <Box display={"flex"} m={1}>
-                <Avatar sx={{ width: "28px", height: "28px" }}>
-                  <Typography sx={{ fontSize: "16px" }}>
-                    M
-                  </Typography>
-                </Avatar>
-                <Typography
-                  sx={{ textDecoration: "underline" }}
-                  variant="subtitle1"
-                  component={"h1"}
-                  ml={1}
-                >
-                  mubashir
-                </Typography>
-              </Box>
-              <Box ml={5}>
-                <Box  mt={2}>
-                  <Rating readOnly size="small" value={3}></Rating>
-                </Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle">helooohhh</Typography>
-                </Box>
-              </Box>
-              <Divider />
+        <Box p={2}>
+          <Box display={"flex"} m={1}>
+            <Avatar sx={{ width: "28px", height: "28px" }}>
+              <Typography sx={{ fontSize: "16px" }}>M</Typography>
+            </Avatar>
+            <Typography
+              sx={{ textDecoration: "underline" }}
+              variant="subtitle1"
+              component={"h1"}
+              ml={1}
+            >
+              mubashir
+            </Typography>
+          </Box>
+          <Box ml={5}>
+            <Box mt={2}>
+              <Rating readOnly size="small" value={3}></Rating>
             </Box>
+            <Box mb={2}>
+              <Typography variant="subtitle">hessssggggggggggg</Typography>
             </Box>
-        )}
+          </Box>
+          <Divider />
+        </Box>
       </Box>
     </>
-  )
-}
+  );
+};
 
 export default Questions;

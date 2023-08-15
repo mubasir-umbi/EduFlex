@@ -89,14 +89,14 @@ const SideBar = (props) => {
         </ListItem>
         </Link>
 
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <AccountBoxIcon />
             </ListItemIcon>
             <ListItemText primary={'Profile'} />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
 
         <Link to={'/admin/students'} style={{ textDecoration: 'none', color: 'inherit' }}>
         <ListItem disablePadding>

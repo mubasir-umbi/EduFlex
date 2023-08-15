@@ -25,8 +25,6 @@ import Lessons from "../../components/user/lessons";
 import { userApi } from "../../services/api";
 import CourseReview from "./CourseReview";
 
-
-
 const CourseView = () => {
   const [course, setCourse] = useState({});
   const [enrolled, setEnrolled] = useState(false);
@@ -36,15 +34,14 @@ const CourseView = () => {
   const { id } = useParams();
   const { userInfo } = useSelector((state) => state.auth);
   const userId = userInfo?._id;
-
- 
+  const authToken = userInfo?.token;
+  console.log(authToken, "..........", userInfo, ".................");
 
   useEffect(() => {
     const getCourseData = async () => {
       try {
         const res = await userApi.get(`course/view?id=${id}`);
         if (res) {
-          console.log();
           setCourse(res.data.courseData);
         }
       } catch (error) {
@@ -59,7 +56,11 @@ const CourseView = () => {
   useEffect(() => {
     const fetchMyCourseData = async () => {
       try {
-        const res = await userApi.get(`my_courses?id=${userId}`);
+        const res = await userApi.get(`my_courses?id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         if (res) {
           res.data.forEach((course) => {
             if (course._id === id) {
@@ -84,14 +85,16 @@ const CourseView = () => {
     console.log(res, "am razorpay responseeee");
     if (res) {
       try {
-        const res = await userApi.post("payment", {
-          userId,
-          courseId: id,
-          paymentMode: "razorpay",
-          amount,
-        });
+        const res = await userApi.post(
+          "payment",
+          {
+            userId,
+            courseId: id,
+            paymentMode: "razorpay",
+            amount,
+          },
+        )
         if (res) {
-          console.log(res);
           navigate("/success");
         }
       } catch (error) {
@@ -130,10 +133,11 @@ const CourseView = () => {
                   <span>&nbsp;</span>
                   <s> 2999</s>
                 </Typography>
-                {/* <Typography variant="p" paragraph>
-                  No of lessons :{course.lesson}
-                </Typography> */}
-                <Box>
+                {/* {console.log(course, course.tutor._id, '?????????????????????????')} */}
+                <Link to={`/filter_tutor/${course?.tutor?._id}`}>
+                  By : {course?.tutor?.firstName}
+                </Link>
+                <Box mt={1}>
                   <Rating
                     precision={0.5}
                     name="read-only"
@@ -160,7 +164,7 @@ const CourseView = () => {
               </CardContent>
               <CardMedia
                 component="img"
-                sx={{ width: 'auto', display: { xs: "none", sm: "block" } }}
+                sx={{ width: "auto", display: { xs: "none", sm: "block" } }}
                 image={course.thumbnail}
                 alt="imageLabel"
               />
@@ -200,7 +204,7 @@ const CourseView = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Divider />
-              <CourseReview id={id}/>
+              <CourseReview id={id} />
             </AccordionDetails>
           </Accordion>
         </Box>

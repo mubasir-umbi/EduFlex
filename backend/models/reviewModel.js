@@ -6,21 +6,24 @@ const reviewSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course', 
     required: true
   },
+
   review: {
     type: String,
-    required: true
   },
+
   rating: {
     type: Number,
     required: true,
     min: 1,
     max: 5
   },
+
   createdAt: {
     type: Date,
     default: Date.now

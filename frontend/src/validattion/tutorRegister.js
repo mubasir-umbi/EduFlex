@@ -1,4 +1,4 @@
-const validateForm = (formData) => {
+const validateForm = (formData, reg) => {
     const errors = {};
   
     if (!formData.firstName) {
@@ -25,17 +25,19 @@ const validateForm = (formData) => {
         errors.mobile = 'Invalid phone format'
     }
 
-    if (!formData.password) {
-      errors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters long';
-    }
-
-    if (!formData.confirmPassword) {
-      errors.confirmPassword = 'Confirm password is required';
-    }else if(formData.confirmPassword !== formData.password){
-      errors.password = 'Password is not match';
-      errors.confirmPassword = 'Password is not match';
+    if(reg){
+      if (!formData.password) {
+        errors.password = 'Password is required';
+      } else if (formData.password.length < 6) {
+        errors.password = 'Password must be at least 6 characters long';
+      }
+  
+      if (!formData.confirmPassword) {
+        errors.confirmPassword = 'Confirm password is required';
+      }else if(formData.confirmPassword !== formData.password){
+        errors.password = 'Password is not match';
+        errors.confirmPassword = 'Password is not match';
+      }
     }
   
     if (!formData.addressLine) {
@@ -54,6 +56,10 @@ const validateForm = (formData) => {
 
     if (!formData.city) {
       errors.city = 'City is required';
+    } 
+    
+    if (!formData.about) {
+      errors.about = 'About you is required';
     } 
 
     if (!formData.zip) {

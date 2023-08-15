@@ -21,8 +21,8 @@ import theme from "../components/ThemeProvider";
 import { ThemeProvider } from "@emotion/react";
 import FilteredCourse from '../components/user/FilteredCourse'
 import CourseTutor from "../components/user/Course_tutor";
-
-
+import Chat from '../screens/chat'
+import Profile from '../components/tutor/Profile'
 
 const UserRoutes = () => {
   return (
@@ -31,6 +31,7 @@ const UserRoutes = () => {
       <Header />
       <Routes>
         <Route index={true} path="/" element={<HomeScreen />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/otp" element={<OtpScreen />} />
@@ -41,6 +42,7 @@ const UserRoutes = () => {
         <Route path="/course_view/:id" element={<CourseView />} />
         <Route path="/filtered/:id" element={<FilteredCourse />} />
         <Route path="/filter_tutor/:id" element={<CourseTutor />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="" element={<PrivateRoute />}>
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/checkout" element={<CheckoutScreen />} />

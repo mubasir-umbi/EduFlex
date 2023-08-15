@@ -53,13 +53,24 @@ export const drawer = (
         </ListItem>
         </Link>
 
-        <Link to={'/admin/Profile'} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={'/tutor/Profile'} style={{ textDecoration: 'none', color: 'inherit' }}>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <AccountBoxIcon />
             </ListItemIcon>
             <ListItemText primary={'Profile'} />
+          </ListItemButton>
+        </ListItem>
+        </Link>
+
+        <Link to={'/tutor/chat'} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <AccountBoxIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Chat'} />
           </ListItemButton>
         </ListItem>
         </Link>

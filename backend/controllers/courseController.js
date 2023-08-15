@@ -76,7 +76,7 @@ const getPopularCourseData = asyncHandler(async (req, res) => {
 const getSingleCourseData = asyncHandler(async(req, res) => {
 
     const id = req.query.id 
-    const courseData = await Course.findById(id);
+    const courseData = await Course.findById(id).populate('tutor', 'firstName _id');
 
   if (courseData) {
     res.status(201).json({ courseData });
@@ -94,7 +94,7 @@ const getSingleCourseData = asyncHandler(async(req, res) => {
 const getCourseData = asyncHandler(async (req, res) => {
   const id = req.query.id;
 
-  const courseData = await Course.find({ tutor: id, isdDeleted: false });
+  const courseData = await Course.find({ tutor: id, isdDeleted: false }).populate('tutor')
   if (courseData) {
     res.status(201).json({ courseData: courseData });
   } else {

@@ -5,6 +5,8 @@ import {
   tutorLogin,
   logoutTutor,
   myStudents,
+  dashBoardData,
+  updateProfile
 } from "../controllers/tutotController.js";
 import {
   addCourse,
@@ -18,7 +20,9 @@ import {
   loadLessonData,
   updateLesson,
 } from "../controllers/lessonController.js";
+import { loadChats } from "../controllers/chatController.js";
 
+import {protect} from '../middleware/authMiddleware.js';
 
 const tutorRoutes = express.Router();
 
@@ -35,5 +39,9 @@ tutorRoutes.get("/course/lesson", loadLessonData);
 tutorRoutes.put("/update_lesson", updateLesson);
 tutorRoutes.get("/delete_lesson", deleteLesson);
 tutorRoutes.get("/my_students", myStudents);
+tutorRoutes.get("/dashboard", dashBoardData);
+tutorRoutes.put("/edit_profile", updateProfile);
+tutorRoutes.get("/chats", loadChats);
+
 
 export default tutorRoutes;

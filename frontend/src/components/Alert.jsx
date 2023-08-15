@@ -26,7 +26,7 @@ const Alert = ({ onCancel, onConfirm }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           Are you sure want to delet category
+           Are you sure want to delete category
           </DialogContentText>
         </DialogContent>
         <DialogActions>

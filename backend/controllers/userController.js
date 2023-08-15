@@ -13,9 +13,10 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password)) && user.isVerified) {
 
     if(!user.isBlocked){
-      generateToken(res, user._id);
+     const token = generateToken(res, user._id);
 
     res.status(201).json({
+      token : token,
       _id: user._id,
       fName: user.fName,
       lName: user.lName,
@@ -151,7 +152,9 @@ const validateOtp = asyncHandler(async (req, res) => {
   }
 });
 
+
 // To reset password email verification 
+
 
 const resetPassword = asyncHandler(async (req, res) => {
   const email = req.body.email;

@@ -7,13 +7,13 @@ import axios from "axios";
 import { TUTOR_URL } from "../../constants/tutorConstants";
 import { toast } from "react-toastify";
 import FormHelperText from "@mui/material/FormHelperText";
-import validateForm from '../../validattion/tutorRegister.js'
+import validateForm from "../../validattion/tutorRegister.js";
 import { useNavigate } from "react-router-dom";
 import { useTutorRegisterMutation } from "../../slices/tutorSlices/tutorApiSlice";
- 
+import { tutorApi } from "../../services/api";
+import { setTutorCredentials } from "../../slices/tutorSlices/tutorAuthSlice";
 
-export default function RegistrationForm() {
-
+export default function RegistrationForm({ tutor, profile }) {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,32 +26,50 @@ export default function RegistrationForm() {
     country: "",
     city: "",
     zip: "",
+    about: "",
   });
 
-  const navigate = useNavigate()
+  const [tutorDetails, setTutorDetails] = useState(tutor);
 
-   const [tutorRegister, {isLoading}] = useTutorRegisterMutation()
+  const navigate = useNavigate();
+
+  const [tutorRegister, { isLoading }] = useTutorRegisterMutation();
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    profile
+      ? setTutorDetails((prev) => ({
+          ...prev,
+          [name]: value,
+        }))
+      : setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: value,
+        }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const reg = true;
 
     const validationErrors = validateForm(formData);
-    setErrors(validationErrors);
+    setErrors(validationErrors, reg);
 
     if (Object.keys(validationErrors).length === 0) {
       try {
         const {
-          firstName,lastName, email,
-          mobile, password, addressLine,addressLine2,
-          state,country, city, zip,
+          firstName,
+          lastName,
+          email,
+          mobile,
+          password,
+          addressLine,
+          addressLine2,
+          state,
+          country,
+          city,
+          zip,
+          about,
         } = formData;
 
         const res = await tutorRegister({
@@ -66,17 +84,38 @@ export default function RegistrationForm() {
           country,
           city,
           zip,
-        }).unwrap()
+        }).unwrap();
 
         if (res) {
-          
-          console.log(res._id);
-          const id = res._id
-          navigate('/tutor/otp', {state: id})
+          const id = res._id;
+          navigate("/tutor/otp", { state: id });
+        }
+      } catch (error) {
+        toast.error(error?.data?.message || error?.message);
+      }
+    }
+  };
+
+  const updateProfile = async (e) => {
+    e.preventDefault();
+
+    const reg = false;
+    const id = tutorDetails.id;
+    const validationErrors = validateForm(tutorDetails, reg);
+    setErrors(validationErrors);
+    console.log(validationErrors, "errors");
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        const res = await tutorApi.put(`edit_profile?id=${id}`, tutorDetails);
+        if (res) {
+          console.log(res);
+          setTutorCredentials(res.data);
+          toast.success("Profile updated");
+          const updated = true
+          navigate("/tutor/profile")
         }
       } catch (error) {
         console.log(error);
-        toast.error(error?.data?.message || error?.message);
       }
     }
   };
@@ -84,11 +123,16 @@ export default function RegistrationForm() {
   return (
     <>
       <Paper sx={{ maxWidth: 700, mt: 1, ml: "auto", mr: "auto", p: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Tutors Registration Form
+        <Typography textAlign={"center"} mb={5} variant="h6" gutterBottom>
+          {profile ? "Edit your porfile" : "Tutors Registration Form"}
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={profile ? updateProfile : handleSubmit}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -99,7 +143,7 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="given-name"
                 variant="standard"
-                value={formData.firstName}
+                value={profile ? tutorDetails.firstName : formData.firstName}
                 onChange={inputChangeHandler}
               />
               {errors.firstName && (
@@ -115,7 +159,7 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="family-name"
                 variant="standard"
-                value={formData.lastName}
+                value={profile ? tutorDetails.lastName : formData.lastName}
                 onChange={inputChangeHandler}
               />
               {errors.lastName && (
@@ -131,7 +175,7 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="family-name"
                 variant="standard"
-                value={formData.email}
+                value={profile ? tutorDetails.email : formData.email}
                 onChange={inputChangeHandler}
               />
               {errors.email && (
@@ -147,47 +191,59 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="family-name"
                 variant="standard"
-                value={formData.mobile}
+                value={profile ? tutorDetails.mobile : formData.mobile}
                 onChange={inputChangeHandler}
               />
               {errors.mobile && (
                 <FormHelperText error={true}>{errors.mobile}</FormHelperText>
               )}
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="password"
-                name="password"
-                label="password"
-                type="password"
-                fullWidth
-                autoComplete="family-name"
-                variant="standard"
-                value={formData.password}
-                onChange={inputChangeHandler}
-              />
-              {errors.password && (
-                <FormHelperText error={true}>{errors.password}</FormHelperText>
-              )}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="confirmPassword"
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                fullWidth
-                autoComplete="Confirm-password"
-                variant="standard"
-                value={formData.confirmPassword}
-                onChange={inputChangeHandler}
-              />
-              {errors.confirmPassword && (
-                <FormHelperText error={true}>{errors.confirmPassword}</FormHelperText>
-              )}
-            </Grid>
+            {!profile && (
+              <>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    id="password"
+                    name="password"
+                    label="password"
+                    type="password"
+                    fullWidth
+                    autoComplete="family-name"
+                    variant="standard"
+                    value={profile ? tutorDetails.password : formData.password}
+                    onChange={inputChangeHandler}
+                  />
+                  {errors.password && (
+                    <FormHelperText error={true}>
+                      {errors.password}
+                    </FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    fullWidth
+                    autoComplete="Confirm-password"
+                    variant="standard"
+                    value={
+                      profile
+                        ? tutorDetails.confirmPassword
+                        : formData.confirmPassword
+                    }
+                    onChange={inputChangeHandler}
+                  />
+                  {errors.confirmPassword && (
+                    <FormHelperText error={true}>
+                      {errors.confirmPassword}
+                    </FormHelperText>
+                  )}
+                </Grid>
+              </>
+            )}
             <Grid item xs={12}>
               <TextField
                 required
@@ -197,7 +253,9 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="address-line1"
                 variant="standard"
-                value={formData.addressLine}
+                value={
+                  profile ? tutorDetails.addressLine : formData.addressLine
+                }
                 onChange={inputChangeHandler}
               />
               {errors.addressLine && (
@@ -214,7 +272,9 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="address-line2"
                 variant="standard"
-                value={formData.addressLine2}
+                value={
+                  profile ? tutorDetails.addressLine2 : formData.addressLine2
+                }
                 onChange={inputChangeHandler}
               />
             </Grid>
@@ -227,7 +287,7 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="shipping address-level2"
                 variant="standard"
-                value={formData.city}
+                value={profile ? tutorDetails.city : formData.city}
                 onChange={inputChangeHandler}
               />
               {errors.city && (
@@ -241,7 +301,7 @@ export default function RegistrationForm() {
                 label="State/Province/Region"
                 fullWidth
                 variant="standard"
-                value={formData.state}
+                value={profile ? tutorDetails.state : formData.state}
                 onChange={inputChangeHandler}
               />
               {errors.state && (
@@ -257,7 +317,7 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="shipping postal-code"
                 variant="standard"
-                value={formData.zip}
+                value={profile ? tutorDetails.zip : formData.zip}
                 onChange={inputChangeHandler}
               />
               {errors.zip && (
@@ -273,11 +333,27 @@ export default function RegistrationForm() {
                 fullWidth
                 autoComplete="shipping country"
                 variant="standard"
-                value={formData.country}
+                value={profile ? tutorDetails.country : formData.country}
                 onChange={inputChangeHandler}
               />
               {errors.country && (
                 <FormHelperText error={true}>{errors.country}</FormHelperText>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="aboutyou"
+                name="aboutyou"
+                label="aboutyou"
+                fullWidth
+                autoComplete="aboutyou"
+                variant="standard"
+                value={profile ? tutorDetails.about : formData.about}
+                onChange={inputChangeHandler}
+              />
+              {errors.about && (
+                <FormHelperText error={true}>{errors.about}</FormHelperText>
               )}
             </Grid>
 
@@ -287,7 +363,7 @@ export default function RegistrationForm() {
               variant="contained"
               sx={{ mt: 6, mb: 2, p: 1.5 }}
             >
-              Submit
+              {profile ? "Upadate" : "Submit"}
             </Button>
           </Grid>
         </Box>

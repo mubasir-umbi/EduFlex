@@ -1,3 +1,5 @@
+import Course from "../models/courseModel.js";
+import EnrolledCourse from "../models/enrolledCourseModel.js";
 import Tutor from "../models/tutorModel.js";
 import User from "../models/userModel.js";
 import asyncHandler from 'express-async-handler'
@@ -123,6 +125,28 @@ const tutorBlock = asyncHandler( async(req, res) => {
 })
 
 
+
+const DashboardData = asyncHandler( async(req, res) => {
+    const toatalStudents = await User.find().count()
+    const toatalTutors = await Tutor.find().count()
+    const toatalCourse = await Course.find().count()
+    const toatalEnrolled = await EnrolledCourse.find().count()
+
+    res.json({
+        toatalCourse,
+        toatalEnrolled,
+        toatalStudents,
+        toatalTutors
+    })
+
+
+    console.log(toatalStudents, 'students', toatalTutors, 'tutors', toatalEnrolled, 'enrolled', toatalCourse, 'course');
+})
+
+
+
+
+
 export {
      loadStudentsData,
      studentBlock, 
@@ -131,4 +155,5 @@ export {
      loadTutorsData, 
      tutorBlock, 
      rejectRequest,
+     DashboardData,
     }

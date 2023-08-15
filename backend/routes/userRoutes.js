@@ -1,5 +1,6 @@
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 import {
   authUser,
@@ -27,14 +28,28 @@ import {
   submitReview,
   getReviews,
   getCourseReviews,
+  updateReview,
+  deleteReview,
 } from "../controllers/reviewController.js";
+
 import {
   addQuestion,
   loadQuestions,
+  deleteQuestion,
+  updateQuestion,
 } from "../controllers/questionController.js";
-import { addReply } from "../controllers/replyController.js";
+
+import {
+  addReply,
+  deleteReply,
+  updateReply,
+} from "../controllers/replyController.js";
+
+
+
 
 const router = express.Router();
+
 
 router.post("/register", registerUser);
 router.post("/auth", authUser);
@@ -44,18 +59,41 @@ router.post("/reset_password", updatePassword);
 router.get("/course/popular", getPopularCourseData);
 router.get("/course/view", getSingleCourseData);
 router.get("/course/category", getCourseByCategory);
-router.post("/payment", saveEnrolledCourseData);
+router.post("/payment", authenticateToken, saveEnrolledCourseData);
 router.get("/my_courses", myEnrolledCourseData);
-router.post("/review", submitReview);
-router.get("/review", getReviews);
 router.get("/course_review", getCourseReviews);
-router.post("/question", addQuestion);
-router.get("/questions", loadQuestions);
-router.post("/reply", addReply);
+
+router
+  .route("/reply")
+  .post(addReply)
+  .put(updateReply)
+  .delete(deleteReply);
+
+router
+  .route("/questions")
+  .get(loadQuestions)
+  .post(addQuestion)
+  .put(updateQuestion)
+  .delete(deleteQuestion);
+
+router
+  .route("/review")
+  .post(submitReview)
+  .get(getReviews)
+  .put(updateReview)
+  .delete(deleteReview);
+
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-router.route("/otp").get(getUserProfile).put(validateOtp);
+
+router
+  .route("/otp")
+  .get(getUserProfile)
+  .put(validateOtp);
+
+
+
 
 export default router;
