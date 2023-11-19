@@ -10,6 +10,8 @@ import MyStudentsScreen from "../screens/tutorScreens/MyStudentsScreen";
 import ProfileScreen from '../screens/tutorScreens/ProfileScreen'
 import EditProfileScreen from "../screens/tutorScreens/EditProfileScreen";
 import ChatScreen from "../screens/tutorScreens/ChatScreen";
+import Page404 from '../screens/Page404'
+
 
 
 const tutorRoutes = () => {
@@ -27,6 +29,8 @@ const tutorRoutes = () => {
         <Route path='/my_students' element={<MyStudentsScreen />} />
         <Route path='/chat' element={<ChatScreen />} />
       </Route>
+      <Route path="/*" element={<Page404 />} />
+
     </Routes>
   );
 };

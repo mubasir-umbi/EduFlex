@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { userApi } from "../../services/api";
+import { userApi, userApiToken } from "../../services/api";
 import { useSelector } from "react-redux";
 import AddReview from "./AddReview";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ const CourseReview = ({ id }) => {
   const [reviewdelete, setReviewDelete] = useState(false)
 
   const { userInfo } = useSelector((state) => state.auth);
-  const userId = userInfo._id;
+  const userId = userInfo?._id;
 
   useEffect(() => {
 
@@ -26,7 +26,6 @@ const CourseReview = ({ id }) => {
       try {
         const res = await userApi.get(`course_review?id=${id}`);
         if (res) {
-          console.log(res, "review resssss");
           setReviews(res.data);
         }
       } catch (error) {
@@ -40,7 +39,7 @@ const CourseReview = ({ id }) => {
 
   const upadateHandler =async ( rating, review, id,) => {
     try {
-      const res = await userApi.put(`review?id=${id}`, {review, rating})
+      const res = await userApiToken.put(`review?id=${id}`, {review, rating})
       if(res){
         setReviewUpdate(true)
         toast.success(res.data)
@@ -54,7 +53,7 @@ const CourseReview = ({ id }) => {
   const deleteReview = async(id) => {
     console.log(id, 'delete id');
     try {
-      const res = await userApi.delete(`review?id=${id}`)
+      const res = await userApiToken.delete(`review?id=${id}`)
       if(res){
         setReviewDelete(true)
         toast.success('Review deleted.')
@@ -72,12 +71,12 @@ const CourseReview = ({ id }) => {
         </Typography>
       ) : (
         <>
-          <Typography ml={3} mt={2}>
+          <Typography ml={3} mt={2} textAlign={'left'}>
             Total {reviews.length} People reviewed this course
           </Typography>
 
           {reviews.map((review) => (
-            <Box p={2} key={review._id}>
+            <Box p={2} key={review._id} textAlign={'left'}>
               <Box display={"flex"} m={1}>
                 <Avatar sx={{ width: "28px", height: "28px" }}>
                   <Typography sx={{ fontSize: "16px" }}>

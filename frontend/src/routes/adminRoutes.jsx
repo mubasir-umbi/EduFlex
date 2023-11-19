@@ -7,6 +7,8 @@ import Page from '../screens/adminScreens/Students'
 import RequstsScreen from '../screens/adminScreens/RequestsScreens.jsx'
 import Tutors from '../screens/adminScreens/Tutors'
 import CategoryScreen from '../screens/adminScreens/CategoryScreen.jsx'
+import Page404 from '../screens/Page404'
+
 
 const adminRoutes = () => {
   return (
@@ -18,6 +20,7 @@ const adminRoutes = () => {
         <Route path='tutors' element={<Tutors />} />
         <Route path='category' element={<CategoryScreen />} />
     </Route>
+    <Route path="/*" element={<Page404 />} />
    </Routes>
   )
 }

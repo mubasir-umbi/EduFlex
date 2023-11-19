@@ -23,6 +23,7 @@ import FilteredCourse from '../components/user/FilteredCourse'
 import CourseTutor from "../components/user/Course_tutor";
 import Chat from '../screens/chat'
 import Profile from '../components/tutor/Profile'
+import Page404 from '../screens/Page404'
 
 const UserRoutes = () => {
   return (
@@ -50,6 +51,7 @@ const UserRoutes = () => {
           <Route path="/watch/:courseId" element={<LessonPlayScreen/>}/>
           <Route path="/success" element={<SuccessPage />} />
         </Route>
+        <Route path="/*" element={<Page404 />} />
       </Routes>
       <Footer />
       </ThemeProvider>

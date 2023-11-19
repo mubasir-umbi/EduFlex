@@ -10,7 +10,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import validateForm from "../../validattion/tutorRegister.js";
 import { useNavigate } from "react-router-dom";
 import { useTutorRegisterMutation } from "../../slices/tutorSlices/tutorApiSlice";
-import { tutorApi } from "../../services/api";
+import { tutorApi, tutorApiToken } from "../../services/api";
 import { setTutorCredentials } from "../../slices/tutorSlices/tutorAuthSlice";
 
 export default function RegistrationForm({ tutor, profile }) {
@@ -84,6 +84,7 @@ export default function RegistrationForm({ tutor, profile }) {
           country,
           city,
           zip,
+          about
         }).unwrap();
 
         if (res) {
@@ -106,7 +107,7 @@ export default function RegistrationForm({ tutor, profile }) {
     console.log(validationErrors, "errors");
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const res = await tutorApi.put(`edit_profile?id=${id}`, tutorDetails);
+        const res = await tutorApiToken.put(`edit_profile?id=${id}`, tutorDetails);
         if (res) {
           console.log(res);
           setTutorCredentials(res.data);
@@ -343,11 +344,11 @@ export default function RegistrationForm({ tutor, profile }) {
             <Grid item xs={12}>
               <TextField
                 required
-                id="aboutyou"
-                name="aboutyou"
-                label="aboutyou"
+                id="about"
+                name="about"
+                label="about"
                 fullWidth
-                autoComplete="aboutyou"
+                autoComplete="about"
                 variant="standard"
                 value={profile ? tutorDetails.about : formData.about}
                 onChange={inputChangeHandler}

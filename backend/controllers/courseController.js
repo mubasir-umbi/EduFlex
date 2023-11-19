@@ -5,7 +5,6 @@ import Course from "../models/courseModel.js";
 
 const addCourse = asyncHandler(async (req, res) => {
   try {
-    console.log("am from add course backend");
     const { description, thumbnail, category, tutor, price } = req.body;
     let title = req.body?.title;
     title = title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
@@ -61,7 +60,6 @@ const getAllCourseData = asyncHandler(async (req, res) => {
 
 
 const getPopularCourseData = asyncHandler(async (req, res) => {
-  console.log(req, 'reqqqqqqqqqqqqqqqqqqqqqqq');
 
   const courseData = await Course.find({isdDeleted: false, popular: true});
 
@@ -116,6 +114,31 @@ const getCourseByCategory = asyncHandler(async (req, res) => {
   }
   } catch (error) {
     console.log(error);
+  }
+});
+
+
+// Filtered course by serch 
+
+const getCourseBySearch = asyncHandler(async (req, res) => {
+  try {
+    const searchQuery = req.query.query; 
+
+    console.log(searchQuery, 'qeeeeeee');
+
+    const courseData = await Course.find({
+   
+          $or: [
+            { title: { $regex: searchQuery, $options: 'i' } }, 
+            { description: { $regex: searchQuery, $options: 'i' } }, 
+          ],
+    });
+
+    console.log(courseData, 'hmmmmmmmmmmmmmmmmmmmmmmmmm');
+      res.status(200).json(courseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -184,4 +207,5 @@ export {
   getPopularCourseData,
   getSingleCourseData,
   getCourseByCategory,
+  getCourseBySearch,
 };

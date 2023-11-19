@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { ADMIN_URL } from "../../constants/adminConstans";
 import SearchBar from "../../components/SerachBar";
 import CourseCard from "../../components/user/CourseCard";
+import { admin, userApi } from "../../services/api";
 
 
 const CourseScreen = () => {
@@ -17,7 +18,7 @@ const CourseScreen = () => {
 
   const fetchCourseData = async () => {
     try {
-      const res = await axios.get(ADMIN_URL + "course");
+      const res = await admin.get("course");
       if (res) {
         setCourseData(res.data.courseData);
       }
@@ -29,7 +30,7 @@ const CourseScreen = () => {
   useEffect(() => {
     const fetchCatData = async () => {
       try {
-        const res = await axios.get(ADMIN_URL + "category");
+        const res = await admin.get("category");
         if (res) {
           console.log(res);
           setCatData(res.data);
@@ -42,18 +43,26 @@ const CourseScreen = () => {
     fetchCourseData();
   }, []);
 
-  const filterCourseByCat = (id) => {
-    const filteredCourse = courseData.filter((cours) => {
-      return cours.category == id;
-    });
-    setCourseData(filteredCourse);
+  const filterCourseByCat = async (id) => {
+    try {
+      const res = await userApi.get(`/course/category?id=${id}`)
+      if(res){
+        setCourseData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 
-  const filterBySerach = (query) => {
-    const filteredCourse = courseData.filter((course) => {
-      return course.title.toLowerCase().includes(query.toLowerCase());
-    });
-    setCourseData(filteredCourse);
+  const filterBySerach =async (query) => {
+    try {
+      const res = await userApi.get(`search_course?query=${query}`)
+      if(res){
+        setCourseData(res.data)
+      }
+    } catch (error) {  
+    }
   };
 
   return (

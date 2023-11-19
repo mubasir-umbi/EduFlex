@@ -12,7 +12,7 @@ import {
 import SideBar from "../../components/tutor/sideBar";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { chatApi, tutorApi } from "../../services/api";
+import { chatApi, tutorApi, tutorApiToken } from "../../services/api";
 import  io  from "socket.io-client";
 import Chat from '../chat'
 
@@ -71,13 +71,11 @@ const ChatScreen = () => {
 
 
     const LoadAllMessage = async(conversation) => {
-        console.log(conversation, 'sssssssssssssssssssssssssssssssssssss');
         setConversation(conversation)
         try {
-          const res = await chatApi.get(`message?id=${conversation}`)
+          const res = await tutorApiToken.get(`message?id=${conversation}`)
           if(res){
             setMessages(res.data)
-            console.log(res.data, 'am all message');
             socket.emit('join-chat', conversation)
           }
         } catch (error) {

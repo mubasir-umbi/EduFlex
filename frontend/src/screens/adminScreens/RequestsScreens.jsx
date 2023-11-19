@@ -15,6 +15,7 @@ import {
 } from "../../components/styles/StyledTableCell";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { adminApi } from "../../services/api";
 
 const RequstsScreen = () => {
   const [requests, setRequests] = useState([]);
@@ -26,7 +27,7 @@ const RequstsScreen = () => {
   useEffect(() => {
     const getUsersData = async () => {
       try {
-        const res = await axios.get(ADMIN_URL + "requests");
+        const res = await adminApi.get("requests");
         setRequests(res.data);
       } catch (error) {
         console.error(error);
@@ -39,7 +40,7 @@ const RequstsScreen = () => {
 
   const AcceptHandler = async (id) => {
     try {
-      const res = await axios.post(ADMIN_URL + "accept_req", { id });
+      const res = await adminApi.post("accept_req", { id });
       if (res) {
         toast.success("Request accepted successfully");
         setAccept(true);
@@ -52,7 +53,7 @@ const RequstsScreen = () => {
 
   const rejectHandler = async (id) => {
     try {
-      const res = await axios.post(ADMIN_URL + "reject_req", { id });
+      const res = await adminApi.post("reject_req", { id });
       console.log(res.data);
       if (res) {
         toast.success("Request rejected");

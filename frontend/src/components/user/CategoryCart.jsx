@@ -10,10 +10,10 @@ import {
   Grid,
   createTheme,
 } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
-import axios from "axios";
-import { ADMIN_URL } from "../../constants/adminConstans";
 import { Link } from "react-router-dom";
+import { admin } from "../../services/api";
+import { styled } from '@mui/material/styles';
+
 
 const cards = [1, 2, 3, 4, 5, 6,];
 
@@ -32,9 +32,8 @@ export default function CategoryCard() {
    useEffect(() => {
     const loadCategory = async() => {
         try {
-          const res = await axios.get(ADMIN_URL+ 'category')
+          const res = await admin.get('category')
           if(res){
-            console.log(res);
             setCategoryData(res.data)
           }
         } catch (error) {
@@ -44,6 +43,13 @@ export default function CategoryCard() {
       loadCategory()
       
    }, [])
+
+
+   const StyledCardContent = styled(CardContent)(({ theme }) => ({
+    textAlign: 'center',
+    textDecoration: 'none',
+    color: '#244D61',
+  }));
 
 
   return (
@@ -59,41 +65,28 @@ export default function CategoryCard() {
           
           <Typography variant="h5" component="h2" gutterBottom>
             {"Most Enrolled Category "}
-            {/* {"The footer will move as the main element of the page grows."} */}
           </Typography>
           <Typography variant="body1">Most Enrolled Category for you</Typography>
         </Container>
       <CssBaseline />
-      <main>
-        <Container sx={{ py: 8 }} maxWidth="lg">
-          <Grid container spacing={4}>
-          
-            {categoryData.map((cat) => (
-              
-              <Grid item key={cat._id} xs={12} sm={6} md={4}>
-                <Card sx={{ maxWidth: 345 }}>
-                  <CardActionArea>
-                    <CardMedia
-                     
-                      component="img"
-                      height="140"
-                      image={cat.imageUrl}
-                      alt="green iguana"
-                    />
-                    <CardContent component={Link} to={`/filtered/${cat._id}`} style={{  textAlign: 'center', textDecoration: 'none', color: '#244D61' }}>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {cat.name}
-                      </Typography>
-                     
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-             
-            ))}
+      <Container sx={{ py: 8 }} maxWidth="lg">
+      <Grid container spacing={4}>
+        {categoryData.map((cat) => (
+          <Grid item key={cat._id} xs={12} sm={6} md={4}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea component={Link} to={`/filtered/${cat._id}`} style={{ textDecoration: 'none' }}>
+                <CardMedia component="img" height="140" image={cat.imageUrl} alt={cat.name} />
+                <StyledCardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {cat.name}
+                  </Typography>
+                </StyledCardContent>
+              </CardActionArea>
+            </Card>
           </Grid>
-        </Container>
-      </main>
+        ))}
+      </Grid>
+    </Container>
     </>
   );
 }

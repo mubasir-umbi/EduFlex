@@ -20,21 +20,22 @@ import {
 } from "../controllers/categoryController.js";
 
 import{ getAllCourseData } from '../controllers/courseController.js'
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 const adminRoutes = express.Router();
 
-adminRoutes.get("/students", loadStudentsData);
+adminRoutes.get("/students", authenticateToken, loadStudentsData);
 adminRoutes.get("/tutors", loadTutorsData);
 adminRoutes.get("/course", getAllCourseData);
-adminRoutes.post("/student/block", studentBlock);
-adminRoutes.get("/requests", loadRequests);
-adminRoutes.post("/accept_req", acceptRequest);
-adminRoutes.post("/reject_req", rejectRequest);
-adminRoutes.post("/tutor/block", tutorBlock);
-adminRoutes.post("/category/add", addCategory);
+adminRoutes.post("/student/block", authenticateToken, studentBlock);
+adminRoutes.get("/requests", authenticateToken, loadRequests);
+adminRoutes.post("/accept_req", authenticateToken, acceptRequest);
+adminRoutes.post("/reject_req", authenticateToken, rejectRequest);
+adminRoutes.post("/tutor/block", authenticateToken, tutorBlock);
+adminRoutes.post("/category/add", authenticateToken, addCategory);
 adminRoutes.get("/category", loadCategoryData);
 adminRoutes.post("/category/update", updateCategory);
-adminRoutes.post("/category/delete", deleteCategory);
-adminRoutes.get("/dashboard", DashboardData);
+adminRoutes.post("/category/delete", authenticateToken, deleteCategory);
+adminRoutes.get("/dashboard", authenticateToken, DashboardData);
 
 export default adminRoutes;

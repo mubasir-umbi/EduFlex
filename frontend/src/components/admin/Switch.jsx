@@ -14,6 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TUTOR_URL } from '../../constants/tutorConstants';
 import { toast } from 'react-toastify';
+import { adminApi } from '../../services/api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,7 +38,7 @@ export default function Toggle({status, id, owner, name}) {
     const blockHandllerStudent = async() => {
         console.log(id);
        try {
-        const res = await axios.post(ADMIN_URL + 'student/block', {id})
+        const res = await adminApi.post('student/block', {id})
         const status = res.data.status
         setOpen(false);
         setBolock(status)
@@ -51,7 +52,7 @@ export default function Toggle({status, id, owner, name}) {
     const blockHandllerTutor = async() => {
         console.log(id);
          try {
-          const res = await axios.post(ADMIN_URL + 'tutor/block', {id})
+          const res = await adminApi.post('tutor/block', {id})
          const status = res.data.status
          setOpen(false);
          setBolock(status)

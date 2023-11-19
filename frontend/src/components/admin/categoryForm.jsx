@@ -10,6 +10,7 @@ import { Paper } from "@mui/material";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { ADMIN_URL } from "../../constants/adminConstans";
+import { adminApi } from "../../services/api";
 
 
 export default function CategoryForm() {
@@ -22,7 +23,7 @@ export default function CategoryForm() {
       if (name.trim() === "") {
         return toast.error("Invalid name");
       }
-      const res = await axios.post(ADMIN_URL + "category/add", {
+      const res = await adminApi.post("category/add", {
         imageUrl,
         name,
       });

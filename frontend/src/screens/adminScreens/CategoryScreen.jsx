@@ -15,6 +15,7 @@ import {
 } from "../../components/styles/StyledTableCell";
 import { toast } from "react-toastify";
 import CategoryForm from "../../components/admin/categoryForm.jsx";
+import {adminApi} from "../../services/api"
 
 
 
@@ -30,7 +31,7 @@ const CategoryScreen = () => {
   useEffect(() => {
     const loadCatData = async () => {
       try {
-        const res = await axios.get(ADMIN_URL + "category");
+        const res = await adminApi.get("category");
         setCatData(res.data);
       } catch (error) {
         console.error(error);
@@ -72,7 +73,7 @@ const CategoryScreen = () => {
     const name = catData[index].name;
     const imageUrl = image ? image : catData[index].imageUrl;
     try {
-      const res = await axios.post(ADMIN_URL + "category/update", {
+      const res = await adminApi.post("category/update", {
         id,
         name,
         imageUrl,
@@ -99,7 +100,7 @@ const CategoryScreen = () => {
   const handleConfirmDelete = async (id) => {
     setUpdate(false);
     try {
-      const res = await axios.post(ADMIN_URL + "category/delete", { id });
+      const res = await adminApi.post("category/delete", { id });
       if (res) {
         toast.success("Category deleted");
         setDeleteStatus(true);

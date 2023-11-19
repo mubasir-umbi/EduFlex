@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { tutorApi } from "../../services/api";
 import CourseCard from "./CourseCard";
 import Profile from "../../components/tutor/Profile";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 
 const CourseTutor = () => {
   const [courseData, setCourseData] = useState([]);
@@ -44,7 +44,9 @@ const CourseTutor = () => {
         students={students}
         tutor={tutor}
       />
-      <Typography mt={2} variant="subtitle1" style={subtitleStyle}>Courses</Typography>
+      
+      <Typography mt={5} variant="subtitle1" style={subtitleStyle}>Courses</Typography>
+      <Divider/>
       <CourseCard courseData={courseData} />;
     </>
   );

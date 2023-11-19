@@ -21,9 +21,9 @@ const StyledContent = styled('div')(({ theme }) => ({
 export default function Page404() {
   return (
     <>
-      <Helmet>
+      <>
         <title> 404 Page Not Found | Minimal UI </title>
-      </Helmet>
+      </>
 
       <Container>
         <StyledContent sx={{ textAlign: 'center', alignItems: 'center' }}>
@@ -50,3 +50,4 @@ export default function Page404() {
     </>
   );
 }
+

@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { userApi } from "../../services/api";
+import { userApi, userApiToken } from "../../services/api";
 import AddReview from "../../components/user/AddReview";
 import { toast } from "react-toastify";
 
@@ -32,7 +32,7 @@ const MyCoursesScreen = () => {
 
   const submitHandler = (rating, review, courseId) => {
     try {
-      const res = userApi.post(
+      const res = userApiToken.post(
         "review",
         { rating, review, userId, courseId },
       );
@@ -48,7 +48,7 @@ const MyCoursesScreen = () => {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const res = await userApi.get("review");
+        const res = await userApiToken.get("review");
         if (res) {
           console.log(res);
           const review = [];
@@ -68,7 +68,7 @@ const MyCoursesScreen = () => {
   useEffect(() => {
     const fetchMyCourseData = async () => {
       try {
-        const res = await userApi.get(`my_courses?id=${userId}`);
+        const res = await userApiToken.get(`my_courses?id=${userId}`);
         if (res) {
           setMyCourse(res.data);
         }

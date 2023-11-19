@@ -20,9 +20,10 @@ import {
   loadLessonData,
   updateLesson,
 } from "../controllers/lessonController.js";
-import { loadChats } from "../controllers/chatController.js";
 
-import {protect} from '../middleware/authMiddleware.js';
+import { loadChats } from "../controllers/chatController.js";
+import { protect } from '../middleware/authMiddleware.js';
+import { authenticateToken } from "../middleware/authenticateToken.js";
 
 const tutorRoutes = express.Router();
 
@@ -33,15 +34,15 @@ tutorRoutes.post("/logout", logoutTutor);
 tutorRoutes.post("/course/add", addCourse);
 tutorRoutes.post("/course/add_lesson", addLesson);
 tutorRoutes.get("/course", getCourseData);
-tutorRoutes.put("/update_course", updateCourseData);
-tutorRoutes.get("/delete_course", deleteCourse);
+tutorRoutes.put("/update_course", authenticateToken, updateCourseData);
+tutorRoutes.get("/delete_course",  authenticateToken, deleteCourse);
 tutorRoutes.get("/course/lesson", loadLessonData);
-tutorRoutes.put("/update_lesson", updateLesson);
-tutorRoutes.get("/delete_lesson", deleteLesson);
-tutorRoutes.get("/my_students", myStudents);
-tutorRoutes.get("/dashboard", dashBoardData);
-tutorRoutes.put("/edit_profile", updateProfile);
-tutorRoutes.get("/chats", loadChats);
+tutorRoutes.put("/update_lesson",  authenticateToken, updateLesson);
+tutorRoutes.get("/delete_lesson",  authenticateToken, deleteLesson);
+tutorRoutes.get("/my_students",  authenticateToken, myStudents);
+tutorRoutes.get("/dashboard",  authenticateToken, dashBoardData);
+tutorRoutes.put("/edit_profile",  authenticateToken, updateProfile);
+tutorRoutes.get("/chats",  authenticateToken, loadChats);
 
 
 export default tutorRoutes;

@@ -194,6 +194,7 @@ const Header = () => {
             </Stack>) : (
               <Stack direction='row' spacing={2 }>
               <Button component={Link} to="/login" color='inherit'>Login</Button>
+              <Button component={Link} to="/tutor/login" color='inherit'>Tutor Login</Button>
               <Button component={Link} to="/register" color='inherit'>Register</Button>
             </Stack>
             )

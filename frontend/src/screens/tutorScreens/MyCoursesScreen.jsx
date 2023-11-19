@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { TUTOR_URL } from "../../constants/tutorConstants";
 import AddCourseForm from "../../components/tutor/AddCourseForm";
 import { Link, useNavigate } from "react-router-dom";
+import { tutorApiToken } from "../../services/api";
 
 const myCourseScreen = () => {
   const [courseData, setCourseData] = useState([]);
@@ -39,7 +40,7 @@ const myCourseScreen = () => {
   useEffect(() => {
     const loadCourseData = async () => {
       try {
-        const res = await axios.get(
+        const res = await tutorApiToken.get(
           `${TUTOR_URL}course?id=${tutorInfo.res.id}`
         );
         console.log(res.data.courseData, "res data");
@@ -109,7 +110,7 @@ const myCourseScreen = () => {
 
     try {
       console.log(id, title, description, thumbnail, price);
-      const res = await axios.put(TUTOR_URL + "update_course", {
+      const res = await tutorApiToken.put(TUTOR_URL + "update_course", {
         id,
         title,
         description,
@@ -127,7 +128,7 @@ const myCourseScreen = () => {
   const handleDelete = async (id) => {
     setDeleteStatus(false);
     try {
-      const res = await axios.get(`${TUTOR_URL}delete_course?id=${id}`);
+      const res = await tutorApiToken.get(`${TUTOR_URL}delete_course?id=${id}`);
       if (res) {
         toast.success(res.data);
         setDeleteStatus(true);

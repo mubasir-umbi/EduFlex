@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Chart from "../../components/chart";
 import CardEl from "../../components/Card";
-import { tutorApi } from "../../services/api";
+import { tutorApi, tutorApiToken } from "../../services/api";
 import { useSelector } from "react-redux";
 import Donut from "../../components/Donut";
 
@@ -25,7 +25,7 @@ const DashboardScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await tutorApi.get(`dashboard?id=${id}`);
+        const res = await tutorApiToken.get(`dashboard?id=${id}`);
         if (res) setDashData(res.data)
       } catch (error) {
         console.log(error)

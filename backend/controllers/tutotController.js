@@ -97,9 +97,10 @@ const tutorLogin = asyncHandler(async (req, res) => {
 
   if (tutor && (await tutor.matchPassword(password)) && tutor.otpVerified) {
     if (!tutor.isBlocked) {
-      generateToken(res, tutor._id);
+     const token =  generateToken(res, tutor._id);
 
       res.status(201).json({
+        token: token,
         id: tutor._id,
         firstName: tutor.firstName,
         lastName: tutor.lastName,

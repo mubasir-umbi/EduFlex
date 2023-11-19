@@ -14,13 +14,12 @@ import {
   StyledTableRow,
 } from "../../components/styles/StyledTableCell";
 import { toast } from "react-toastify";
-// import { useGetMyCourseQuery } from "../../slices/tutorSlices/tutorApiSlice";
 import { useSelector } from "react-redux";
 import { TUTOR_URL } from "../../constants/tutorConstants";
 import AddCourseForm from "../../components/tutor/AddCourseForm";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AddLessonsForm from "../../components/tutor/AddLessonsForm";
-import { tutorApi } from "../../services/api";
+import { tutorApi, tutorApiToken } from "../../services/api";
 
 const LessonsScreen = () => {
   const [LessonsData, setLessonsData] = useState([]);
@@ -41,7 +40,7 @@ const LessonsScreen = () => {
   useEffect(() => {
     const loadLessonData = async () => {
       try {
-        const res = await tutorApi.get(`course/lesson?id=${id}`);
+        const res = await tutorApiToken.get(`course/lesson?id=${id}`);
         if (res) {
           setLessonsData(res.data);
         }
@@ -76,7 +75,7 @@ const LessonsScreen = () => {
 
     try {
       console.log(id, title, description);
-      const res = await tutorApi.put(`update_lesson?id=${id}`, {
+      const res = await tutorApiToken.put(`update_lesson?id=${id}`, {
         title,
         description,
       });
@@ -93,7 +92,7 @@ const LessonsScreen = () => {
   const handleDelete = async (id) => {
     setDeleteStatus(false);
     try {
-      const res = await tutorApi.get(`delete_lesson?id=${id}`);
+      const res = await tutorApiToken.get(`delete_lesson?id=${id}`);
       if (res) {
         toast.success(res.data);
         setDeleteStatus(true);

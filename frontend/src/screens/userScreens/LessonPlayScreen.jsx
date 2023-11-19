@@ -14,7 +14,7 @@ import VideoPlayer from "../../components/videoPlayer";
 import Lessons from "../../components/user/lessons";
 import { useParams } from "react-router-dom";
 // import Questions from "../../components/user/questions";
-import { userApi } from "../../services/api";
+import { userApi, userApiToken } from "../../services/api";
 import { formatDistanceToNow } from "date-fns";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -28,24 +28,26 @@ const LessonPlayScreen = () => {
   const [question, setQuestion] = useState("");
   const [questionsData, setQuestionsData] = useState([]);
   const [open, setOpen] = useState(new Array(questionsData.length).fill(false));
-  const [replyOpen, setReplyOpen] = useState(new Array(questionsData.length).fill(false));
-  const [reply, setReply] = useState(new Array(questionsData.length).fill(false));
+  const [replyOpen, setReplyOpen] = useState(
+    new Array(questionsData.length).fill(false)
+  );
+  const [reply, setReply] = useState(
+    new Array(questionsData.length).fill(false)
+  );
   const [replyUpdated, setReplayUpdated] = useState(false);
   const [questionUpdated, setquestionUpdated] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [lessonStatus, setLessonStatus] = useState({});
-  const [tutor, setTutor] = useState('')
-  
+  const [tutor, setTutor] = useState("");
 
   const handleLessonComplete = (lessonId) => {
     if (lessonId === lesson._id) {
-      setLessonStatus(prevStatus => ({
+      setLessonStatus((prevStatus) => ({
         ...prevStatus,
-        [lessonId]: { id: lessonId, completed: true }
+        [lessonId]: { id: lessonId, completed: true },
       }));
     }
-  }
-
+  };
 
   const { courseId } = useParams();
 
@@ -71,7 +73,6 @@ const LessonPlayScreen = () => {
     setReply(newReply);
   };
 
-
   const updateVideoProgress = async (progress) => {
     console.log(progress);
     // try {
@@ -89,8 +90,7 @@ const LessonPlayScreen = () => {
     updateVideoProgress(videoProgress); // Send progress to backend
   };
 
-
-  const playHandler = ( lesson ) => {
+  const playHandler = (lesson) => {
     setLesson(lesson);
   };
 
@@ -101,14 +101,15 @@ const LessonPlayScreen = () => {
       try {
         const res = await userApi.get(`questions?id=${courseId}`);
         if (res) {
-          setQuestionsData(res.data)}
-          setTutor(res.data[0].course.tutor)
+          setQuestionsData(res.data);
+        }
+        setTutor(res.data[0].course.tutor);
       } catch (error) {
         console.log(error);
       }
     };
     getQuestiotns();
-  }, [replyUpdated, questionUpdated])
+  }, [replyUpdated, questionUpdated]);
 
   /// Submit new question handler function ///
 
@@ -118,9 +119,12 @@ const LessonPlayScreen = () => {
 
     if (!text) return;
     try {
-      const res = await userApi.post("question", {
-        userId, courseId, lessonId, text,
-      })
+      const res = await userApiToken.post("question", {
+        userId,
+        courseId,
+        lessonId,
+        text,
+      });
       if (res) {
         setquestionUpdated(!questionUpdated);
         toast.success(res.data, {
@@ -139,9 +143,13 @@ const LessonPlayScreen = () => {
 
     if (!text) return;
     try {
-      const res = await userApi.post("reply", { userId, questionId, text });
+      const res = await userApiToken.post("reply", {
+        userId,
+        questionId,
+        text,
+      });
       if (res) {
-        setReplayUpdated(true);
+        setReplayUpdated(!replyUpdated);
         toast.success(res.data, {
           position: "bottom-center",
         });
@@ -155,7 +163,7 @@ const LessonPlayScreen = () => {
 
   const qstEditHandler = (id, text) => {
     try {
-      const res = userApi.put(`questions?id=${id}`, { text });
+      const res = userApiToken.put(`questions?id=${id}`, { text });
       if (res) {
         toast.success(res.data);
         setquestionUpdated(!questionUpdated);
@@ -169,7 +177,7 @@ const LessonPlayScreen = () => {
 
   const qstDeleteHandler = async (id) => {
     try {
-      const res = await userApi.delete(`questions?id=${id}`);
+      const res = await userApiToken.delete(`questions?id=${id}`);
       if (res) {
         toast.success(res.data);
         setquestionUpdated(!questionUpdated);
@@ -179,13 +187,12 @@ const LessonPlayScreen = () => {
     }
   };
 
-
   /// Reply edit api call it takes question id as querey and text in body
 
   const replyEditHandler = (id, text) => {
     console.log(id, text);
     try {
-      const res = userApi.put(`reply?id=${id}`, { text });
+      const res = userApiToken.put(`reply?id=${id}`, { text });
       if (res) {
         toast.success(res.data);
         setReplayUpdated(!replyUpdated);
@@ -197,10 +204,9 @@ const LessonPlayScreen = () => {
 
   /// Reply delete api call it takes question id as querey
 
-
   const replyDeleteHandler = async (id) => {
     try {
-      const res = await userApi.delete(`reply?id=${id}`);
+      const res = await userApiToken.delete(`reply?id=${id}`);
       if (res) {
         toast.success(res.data);
         setReplayUpdated(!replyUpdated);
@@ -210,12 +216,29 @@ const LessonPlayScreen = () => {
     }
   };
 
-
   return (
     <>
       <Box display={"flex"}>
-        <VideoPlayer url={lesson.videoUrl} lessonId={lesson._id} onComplete={handleLessonComplete}/>
-        <Box style={{ width: "30%" }} ml={2} mt={4} mr={2}>
+        <VideoPlayer
+          url={lesson.videoUrl}
+          lessonId={lesson._id}
+          onComplete={handleLessonComplete}
+        />
+        <Box
+          style={{ width: "30%" }}
+          ml={2}
+          mt={4}
+          mr={2}
+          sx={{
+            maxHeight: {
+              xs: "200px",
+              sm: "300px",
+              md: "400px",
+              lg: "550px",
+            },
+            overflowY: "auto",
+          }}
+        >
           <Lessons
             status={false}
             width={"100px"}
@@ -226,7 +249,7 @@ const LessonPlayScreen = () => {
           />
         </Box>
       </Box>
-      <p>Completed: {lessonStatus.completed ? 'Yes' : 'No'}</p>
+      <p>Completed: {lessonStatus.completed ? "Yes" : "No"}</p>
       <Divider width={"68%"} sx={{ mb: 3, ml: 1 }} />
       {/* <Questions lesson={lesson} courseId={courseId} /> */}
 
@@ -459,8 +482,8 @@ const LessonPlayScreen = () => {
           <Divider />
         </Box>
       </Box>
-      <div style={{position: 'fixed', bottom: 80, right: 20 }}>
-      <ChatPopUp tutorId ={tutor}/>
+      <div style={{ position: "fixed", bottom: 80, right: 20 }}>
+        <ChatPopUp tutorId={tutor} />
       </div>
     </>
   );

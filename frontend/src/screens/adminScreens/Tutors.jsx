@@ -14,6 +14,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../components/styles/StyledTableCell";
+import { adminApi } from "../../services/api";
 
 export default function Students() {
   const [tutorsData, setTutorsData] = useState([]);
@@ -21,7 +22,7 @@ export default function Students() {
   useEffect(() => {
     const getTutorsData = async () => {
       try {
-        const res = await axios.get(ADMIN_URL + "tutors");
+        const res = await adminApi.get(ADMIN_URL + "tutors");
         setTutorsData(res.data);
       } catch (error) {
         console.error(error);

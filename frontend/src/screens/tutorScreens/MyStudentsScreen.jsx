@@ -14,7 +14,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../components/styles/StyledTableCell";
-import { tutorApi } from "../../services/api";
+import { tutorApi, tutorApiToken } from "../../services/api";
 import { useSelector } from "react-redux";
 
 
@@ -29,7 +29,7 @@ const MyStudentsScreen = () => {
   useEffect(() => {
     try {
       const loadMyStudents = async () => {
-        const res = await tutorApi.get(`my_students?id=${id}`);
+        const res = await tutorApiToken.get(`my_students?id=${id}`);
         if (res) {
           console.log(res);
           setStudents(res.data);

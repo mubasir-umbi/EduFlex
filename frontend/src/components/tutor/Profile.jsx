@@ -48,7 +48,7 @@ const UserProfile = ({ tutor, students, course, user, isTutor, }) => {
   };
 
   return (
-    <Paper sx={{ width: "80%", mt: 12 }} elevation={3} style={paperStyle}>
+    <Paper sx={{ width: "80%", mt: 12, ml: 'auto', mr: 'auto'}} elevation={3} style={paperStyle}>
       <Avatar alt="User Avatar" style={avatarStyle}></Avatar>
       <Typography variant="h4" style={usernameStyle}>
         {tutor?.firstName}

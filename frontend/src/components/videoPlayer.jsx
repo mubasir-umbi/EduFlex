@@ -91,6 +91,20 @@
 
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
+import { styled } from '@mui/material/styles';
+    
+    const StyledReactPlayer = styled(ReactPlayer)(({ theme }) => ({
+      maxHeight: {
+        xs: '200px',
+        sm: '300px',
+        md: '400px',
+        lg: '500px',
+      },
+      overflowY: 'auto',
+      border: '3px solid black',
+      marginTop: '30px',
+      backgroundColor: 'black',
+    }));
 
 const VideoPlayer = ({ url, lessonId, onComplete }) => {
   const [completed, setCompleted] = useState(false);
@@ -104,18 +118,41 @@ const VideoPlayer = ({ url, lessonId, onComplete }) => {
     }
   };
 
+
+
   return (
+
     <>
-      <ReactPlayer
-       style={{ border: 3, marginTop: '30px', backgroundColor: 'black', maxHeight: '560px' }}
-        url={url}
-        controls
-        width="70%"
-        height="auto"
-        playing={false}
-        onProgress={handleProgress}
-      />
+    
+    <StyledReactPlayer
+      url={url}
+      controls
+      width="70%"
+      height="auto"
+      playing={false}
+      onProgress={handleProgress}
+    />
     </>
+    // <>
+    //   <ReactPlayer
+    //   sx={{
+    //         maxHeight: {
+    //           xs: "200px",
+    //           sm: "300px",
+    //           md: "400px",
+    //           lg: "500px",
+    //         },
+    //         overflowY: "auto",
+    //       }}
+    //    style={{ border: 3, marginTop: '30px', backgroundColor: 'black'}}
+    //     url={url}
+    //     controls
+    //     width="70%"
+    //     height="auto"
+    //     playing={false}
+    //     onProgress={handleProgress}
+    //   />
+    // </>
   )
 }
 

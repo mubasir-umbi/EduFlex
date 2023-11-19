@@ -17,6 +17,7 @@ import {
   getPopularCourseData,
   getSingleCourseData,
   getCourseByCategory,
+  getCourseBySearch,
 } from "../controllers/courseController.js";
 
 import {
@@ -60,28 +61,29 @@ router.get("/course/popular", getPopularCourseData);
 router.get("/course/view", getSingleCourseData);
 router.get("/course/category", getCourseByCategory);
 router.post("/payment", authenticateToken, saveEnrolledCourseData);
-router.get("/my_courses", myEnrolledCourseData);
+router.get("/my_courses", authenticateToken, myEnrolledCourseData);
 router.get("/course_review", getCourseReviews);
+router.get("/search_course", getCourseBySearch);
 
 router
   .route("/reply")
-  .post(addReply)
-  .put(updateReply)
-  .delete(deleteReply);
+  .post(authenticateToken, addReply)
+  .put(authenticateToken, updateReply)
+  .delete(authenticateToken, deleteReply);
 
 router
   .route("/questions")
-  .get(loadQuestions)
-  .post(addQuestion)
-  .put(updateQuestion)
-  .delete(deleteQuestion);
+  .get( loadQuestions)
+  .post(authenticateToken, addQuestion)
+  .put(authenticateToken, updateQuestion)
+  .delete(authenticateToken, deleteQuestion);
 
 router
   .route("/review")
-  .post(submitReview)
-  .get(getReviews)
-  .put(updateReview)
-  .delete(deleteReview);
+  .post(authenticateToken, submitReview)
+  .get( getReviews)
+  .put(authenticateToken, updateReview)
+  .delete(authenticateToken, deleteReview);
 
 router
   .route("/profile")

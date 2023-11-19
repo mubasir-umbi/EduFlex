@@ -11,6 +11,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { USERS_URL } from "../../constants/usersConstants";
 import CourseCard from "./CourseCard";
+import {userApi} from '../../services/api'
 
 
 
@@ -22,7 +23,7 @@ const Hero = () => {
   useEffect(() => {
     const loadCourse = async () => {
       try {
-        const res = await axios.get(USERS_URL + "course/popular");
+        const res = await userApi.get("course/popular");
         if (res) {
           console.log(res);
           setCourseData(res.data.courseData);
@@ -38,88 +39,83 @@ const Hero = () => {
   return (
    
     
-      <main>
-          <CssBaseline />
-        {/* Hero unit */}
-        <Box
-          component={Paper}
-          m={1}
+    <main>
+      <CssBaseline />
+      <Box
+        component={Paper}
+        m={1}
+        sx={{
+          backgroundImage: `url(${'https://source.unsplash.com/BJx8whKXCgc'})`,
+          minHeight: '400px',
+          maxHeight: '550px',
+          p: 5, 
+          backgroundSize: 'cover',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+          textAlign: 'center', 
+        }}
+      >
+        <Typography
+          component="h1"
+          variant="h3"
+          color="text.secondary"
+          gutterBottom
+          sx={{
+            color: '#000',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+            fontSize: { xs: '1.5rem', sm: '2.5rem', md: '4rem' },
+          }}
         >
-          <Container
-            maxWidth="xl"
-            sx={{
-              backgroundImage: `url(${"https://source.unsplash.com/BJx8whKXCgc"})`,
-              minHeight: "250px",
-              maxHeight: '550px',
-              p: 10,
-              backgroundSize: "cover",
-            }}
-          >
-            <Box
-              style={{
-                // backgroundColor: "rgba(0, 0, 0, 0.2)",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="text.secondary"
-                gutterBottom
-                sx={{ color: "#000000" }}
-              >
-                Comprehensive learning programs & classes for all students
-              </Typography>
-            </Box>
-            <Typography
-              variant="h5"
-              align="center"
-              color="text.secondary"
-              paragraph
-              sx={{ maxWidth: "sm", mt: 6 }}
-              style={{
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                color: "#fff",
-                marginLeft: "auto",
-                marginRight: "auto",
-                backgroundColor: "rgba(0, 0, 0, 0.2)",
-              }}
-            >
-              Become lifelong learners with India's best teachers, engaging
-              video lessons and personalised learning journeys
-            </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <Link to={'/course'}>
-              <Button sx={{borderRadius: 0}} variant="contained">Explore Courses</Button>
-              </Link>
-              {/* <Button variant="outlined">Secondary action</Button> */}
-            </Stack>
-          </Container>
-        </Box>
-
-        <CssBaseline />
-        <Container
-          component="main"
-          sx={{ mt: 8, mb: 2, border: 1, p: 3, textAlign: "center"}}
-          maxWidth="lg"
-          alignItems={"center"}
+          Comprehensive learning programs & classes for all students
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          paragraph
+          sx={{
+            maxWidth: 'md',
+            fontSize: { xs: '0.9rem', sm: '1rem', md: '2rem' },
+            lineHeight: { xs: '1.5', sm: '1.6' },
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+            color: '#ffffff',
+            padding: '0.5rem',
+          }}
         >
-          
-          <Typography variant="h5" component="h2" gutterBottom>
-            {"Popular courses for you"}
-            {/* {"The footer will move as the main element of the page grows."} */}
-          </Typography>
-          <Typography variant="body1">Popular courses for you</Typography>
-        </Container>
+          Become lifelong learners with India's best teachers, engaging video lessons, and personalized learning journeys
+        </Typography>
+        <Stack
+          sx={{ pt: 4 }}
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+        >
+          <Link to={'/course'} style={{ textDecoration: 'none' }}>
+            <Button variant="contained" sx={{ borderRadius: 0 }}>
+              Explore Courses
+            </Button>
+          </Link>
+        </Stack>
+      </Box>
 
-        <CourseCard courseData={courseData}/>
-      </main>
+      <CssBaseline />
+      <Container
+        component="section"
+        sx={{ mt: 8, mb: 2, p: 3, border: 1,  textAlign: 'center' }}
+        maxWidth="lg"
+        alignItems="center"
+      >
+        <Typography variant="h5" component="h2" gutterBottom>
+          Popular courses for you
+        </Typography>
+        <Typography variant="body1">Popular courses for you</Typography>
+      </Container>
+
+      <CourseCard courseData={courseData} />
+    </main>
+
   );
 };
 

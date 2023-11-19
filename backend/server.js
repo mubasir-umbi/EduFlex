@@ -79,38 +79,6 @@ const io = new Server(server, {
   },
 });
 
-// let users = [];
-
-
-// io.on("connection", (socket) => {
-//   console.log("user connected", socket.id);
-
-//   socket.on("setup", (userData) => {
-//     socket.join(userData?._id, 'userid');
-//     console.log(userData?._id);
-//     socket.emit("connected");
-//   });
-
-//   socket.on('join chat', room => {
-//     socket.join(room)
-//     console.log('user joinde room', room);
-//   })
-
-
-//   socket.on('new message', newMessage => {
-//     const chat = newMessage.message
-
-//     if(!chat.participants) return console.log('chat.user in not defined');
-//     chat.participant.forEach(user => {
-//      if (user._id  == newMessage.sender._id) return
-
-//      socket.in(user._id).emit("message recieved", newMessage)
-//     });
-//   })
-
- 
-
-// });
 
 
 io.on('connection', (socket) => {
