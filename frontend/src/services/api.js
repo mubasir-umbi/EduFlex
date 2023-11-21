@@ -89,13 +89,11 @@ export const tutorApiToken = axios.create({
 })
 
 const tutorInfo = JSON.parse(localStorage.getItem('tutorInfo'))
-console.log(tutorInfo, 'am tutorInfo,,,');
-console.log(tutorInfo?.res?.token, 'am tokennnnn');
 
 tutorApiToken.interceptors.request.use(
   (config) => {
     const token =  tutorInfo?.res?.token
-    console.log(token, 'am tokennnnn tutor');
+
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
